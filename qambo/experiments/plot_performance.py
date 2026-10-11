@@ -73,7 +73,8 @@ leg = fig.legend(labels, handlelength=0, handletextpad=0, fancybox=True,
                 ncol=5, loc='upper center', bbox_to_anchor=(0.5, 0.03),
                 markerscale=0.0)
 
-for item in leg.legendHandles:
+handles = getattr(leg, 'legend_handles', getattr(leg, 'legendHandles', []))
+for item in handles:
     item.set_visible(False)
     
 plt.tight_layout(pad=2)
@@ -136,7 +137,8 @@ leg = fig.legend(labels, handlelength=0, handletextpad=0, fancybox=True,
                 ncol=5, loc='upper center', bbox_to_anchor=(0.5, 0.03),
                 markerscale=0.0)
 
-for item in leg.legendHandles:
+handles = getattr(leg, 'legend_handles', getattr(leg, 'legendHandles', []))
+for item in handles:
     item.set_visible(False)
     
 plt.tight_layout(pad=2)
