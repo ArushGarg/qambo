@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import type { Ambulance, Incident, Hospital, DispatchBase, Hotspot } from '../types/simulation';
-import { MousePointerClick, Layers, Eye, Compass, Radar, Shield } from 'lucide-react';
+import { MousePointerClick, Layers, Eye, Compass, Shield, MapPin, Truck, Plus } from 'lucide-react';
 
 interface CityGridMapProps {
   ambulances: Ambulance[];
@@ -41,16 +41,16 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
       const width = canvas.width;
       const height = canvas.height;
       const scale = width / WORLD_SIZE;
-      radarAngle += 0.02;
+      radarAngle += 0.018;
 
       // ==========================================
-      // 1. BASE TERRAIN & CITY BACKGROUND
+      // 1. BASE CANVASES & URBAN BLOCKS
       // ==========================================
-      ctx.fillStyle = '#060a14';
+      ctx.fillStyle = '#080c16';
       ctx.fillRect(0, 0, width, height);
 
-      // Draw subtle city blocks (grid-based metropolitan texture)
-      ctx.fillStyle = '#0a1020';
+      // Shaded urban city blocks (clean architectural texture)
+      ctx.fillStyle = '#0f172a';
       const blockSize = 4 * scale;
       const gap = 1 * scale;
       for (let bx = gap; bx < width - gap; bx += blockSize + gap) {
@@ -59,7 +59,7 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         }
       }
 
-      // Draw River / Waterway across the city (aesthetic geographic feature)
+      // Waterway cutting through sector
       ctx.beginPath();
       ctx.moveTo(0, height * 0.42);
       ctx.bezierCurveTo(
@@ -74,35 +74,32 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         0, height * 0.48
       );
       ctx.closePath();
-      ctx.fillStyle = 'rgba(6, 182, 212, 0.06)';
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.07)';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
+      ctx.strokeStyle = 'rgba(37, 99, 235, 0.18)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
       // ==========================================
-      // 2. MAJOR ARTERIAL HIGHWAYS & ROAD NETWORK
+      // 2. ARTERIAL HIGHWAYS & ROAD NETWORK
       // ==========================================
-      ctx.strokeStyle = 'rgba(30, 41, 59, 0.85)';
-      ctx.lineWidth = 6;
-      // Main horizontal & vertical expressways
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 5;
       const expressways = [10, 20, 30, 40];
       expressways.forEach((pos) => {
-        // Horizontal
         ctx.beginPath();
         ctx.moveTo(0, pos * scale);
         ctx.lineTo(width, pos * scale);
         ctx.stroke();
 
-        // Vertical
         ctx.beginPath();
         ctx.moveTo(pos * scale, 0);
         ctx.lineTo(pos * scale, height);
         ctx.stroke();
       });
 
-      // Neon road lane center dashes
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      // Subtle dashed road markings
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 6]);
       expressways.forEach((pos) => {
@@ -118,17 +115,17 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
       });
       ctx.setLineDash([]);
 
-      // Sector Zone Typography Overlay
-      ctx.font = '700 11px "JetBrains Mono", monospace';
-      ctx.fillStyle = 'rgba(148, 163, 184, 0.2)';
+      // Sector Zone Labels
+      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(100, 116, 139, 0.35)';
       ctx.textAlign = 'left';
-      ctx.fillText('SECTOR 1 [NORTH INDUSTRIAL]', 14, 22);
-      ctx.fillText('SECTOR 2 [METRO CORE]', width * 0.52, 22);
-      ctx.fillText('SECTOR 3 [DOWNTOWN SOUTH]', 14, height - 16);
-      ctx.fillText('SECTOR 4 [TECH EXP-WAY]', width * 0.52, height - 16);
+      ctx.fillText('SECTOR 1 [NORTH DISTRICT]', 16, 20);
+      ctx.fillText('SECTOR 2 [METRO CORE]', width * 0.52, 20);
+      ctx.fillText('SECTOR 3 [SOUTHERN BASIN]', 16, height - 14);
+      ctx.fillText('SECTOR 4 [EAST ARTERY]', width * 0.52, height - 14);
 
       // ==========================================
-      // 3. SHIFTING RISK HOTSPOTS (DAY/NIGHT RISK)
+      // 3. RISK HOTSPOTS (SHIFTING CLUSTERS)
       // ==========================================
       if (showHotspots) {
         hotspots.forEach((spot) => {
@@ -136,37 +133,33 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
           const cy = spot.y * scale;
           const r = spot.radius * scale;
 
-          // Multi-layer glowing heat halo
           const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-          grad.addColorStop(0, 'rgba(239, 68, 68, 0.28)');
-          grad.addColorStop(0.5, 'rgba(244, 63, 94, 0.12)');
-          grad.addColorStop(0.85, 'rgba(244, 63, 94, 0.04)');
-          grad.addColorStop(1, 'rgba(244, 63, 94, 0)');
+          grad.addColorStop(0, 'rgba(239, 68, 68, 0.22)');
+          grad.addColorStop(0.6, 'rgba(239, 68, 68, 0.08)');
+          grad.addColorStop(1, 'rgba(239, 68, 68, 0)');
 
           ctx.fillStyle = grad;
           ctx.beginPath();
           ctx.arc(cx, cy, r, 0, Math.PI * 2);
           ctx.fill();
 
-          // Dotted hazard border
-          ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([6, 6]);
+          ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([5, 5]);
           ctx.beginPath();
           ctx.arc(cx, cy, r, 0, Math.PI * 2);
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // Hotspot Center Label
           ctx.font = '600 9px "Plus Jakarta Sans", sans-serif';
-          ctx.fillStyle = '#f87171';
+          ctx.fillStyle = 'rgba(248, 113, 113, 0.85)';
           ctx.textAlign = 'center';
-          ctx.fillText(`⚡ ${spot.name}`, cx, cy - r - 4);
+          ctx.fillText(`INCIDENT ZONE: ${spot.name.toUpperCase()}`, cx, cy - r - 4);
         });
       }
 
       // ==========================================
-      // 4. RADAR SWEEP SCANNER BEAM
+      // 4. RADAR SWEEP SCANNER
       // ==========================================
       if (showRadarSweep) {
         const cx = width / 2;
@@ -174,29 +167,28 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         const radius = width * 0.72;
 
         const sweepGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        sweepGrad.addColorStop(0, 'rgba(6, 182, 212, 0.08)');
-        sweepGrad.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+        sweepGrad.addColorStop(0, 'rgba(37, 99, 235, 0.08)');
+        sweepGrad.addColorStop(1, 'rgba(37, 99, 235, 0.01)');
 
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, radius, radarAngle - 0.35, radarAngle);
+        ctx.arc(cx, cy, radius, radarAngle - 0.32, radarAngle);
         ctx.closePath();
         ctx.fillStyle = sweepGrad;
         ctx.fill();
 
-        // Leading bright scanner line
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(cx + Math.cos(radarAngle) * radius, cy + Math.sin(radarAngle) * radius);
-        ctx.strokeStyle = 'rgba(6, 182, 212, 0.35)';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.35)';
+        ctx.lineWidth = 1.2;
         ctx.stroke();
         ctx.restore();
       }
 
       // ==========================================
-      // 5. TRAJECTORY PATHS WITH VEHICLE TRAILS
+      // 5. TRAJECTORY PATH LINES
       // ==========================================
       if (showPaths) {
         ambulances.forEach((ambo) => {
@@ -211,15 +203,15 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
             ctx.lineTo(targetX, targetY);
 
             if (ambo.status === 'dispatched') {
-              ctx.strokeStyle = 'rgba(245, 158, 11, 0.65)'; // Amber path to scene
+              ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
             } else if (ambo.status === 'transporting') {
-              ctx.strokeStyle = 'rgba(168, 85, 247, 0.65)'; // Purple path to hospital
+              ctx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
             } else {
-              ctx.strokeStyle = 'rgba(6, 182, 212, 0.65)'; // Cyan path to base
+              ctx.strokeStyle = 'rgba(16, 185, 129, 0.6)';
             }
 
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 6]);
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([5, 5]);
             ctx.stroke();
             ctx.setLineDash([]);
           }
@@ -227,36 +219,25 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
       }
 
       // ==========================================
-      // 6. 25 STRATEGIC DISPATCH BASES (STATIONS)
+      // 6. 25 DISPATCH BASES
       // ==========================================
       dispatchBases.forEach((base) => {
         const bx = base.x * scale;
         const by = base.y * scale;
         const hasAmbo = base.ambulancesPresent > 0;
 
-        // Base Pod Exterior
-        ctx.fillStyle = hasAmbo ? 'rgba(6, 182, 212, 0.22)' : 'rgba(15, 23, 42, 0.7)';
-        ctx.strokeStyle = hasAmbo ? '#06b6d4' : 'rgba(148, 163, 184, 0.3)';
-        ctx.lineWidth = hasAmbo ? 2 : 1;
+        ctx.fillStyle = hasAmbo ? 'rgba(37, 99, 235, 0.22)' : 'rgba(15, 23, 42, 0.8)';
+        ctx.strokeStyle = hasAmbo ? '#3b82f6' : 'rgba(100, 116, 139, 0.3)';
+        ctx.lineWidth = hasAmbo ? 1.8 : 1;
 
         ctx.beginPath();
-        ctx.roundRect(bx - 12, by - 12, 24, 24, 6);
+        ctx.roundRect(bx - 11, by - 11, 22, 22, 4);
         ctx.fill();
         ctx.stroke();
 
-        // Pulsing base beacon if units are parked
-        if (hasAmbo) {
-          ctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(bx, by, 16 + Math.sin(Date.now() / 250) * 2, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-
-        // Base Number & Unit Count
         if (showBaseLabels) {
-          ctx.font = '700 8px "JetBrains Mono", monospace';
-          ctx.fillStyle = hasAmbo ? '#38bdf8' : '#94a3b8';
+          ctx.font = '600 8px "JetBrains Mono", monospace';
+          ctx.fillStyle = hasAmbo ? '#93c5fd' : '#64748b';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(`B${base.id + 1}`, bx, by - (hasAmbo ? 2 : 0));
@@ -264,52 +245,52 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
           if (hasAmbo) {
             ctx.font = '600 7px "JetBrains Mono", monospace';
             ctx.fillStyle = '#34d399';
-            ctx.fillText(`• ${base.ambulancesPresent} •`, bx, by + 6);
+            ctx.fillText(`${base.ambulancesPresent}`, bx, by + 5);
           }
         }
       });
 
       // ==========================================
-      // 7. HOSPITALS (EMERGENCY TRAUMA CENTERS)
+      // 7. HOSPITALS (TRAUMA CENTERS)
       // ==========================================
       hospitals.forEach((hosp) => {
         const hx = hosp.x * scale;
         const hy = hosp.y * scale;
 
-        // Glowing outer green perimeter
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.18)';
+        // Outer perimeter ring
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
         ctx.beginPath();
-        ctx.arc(hx, hy, 22, 0, Math.PI * 2);
+        ctx.arc(hx, hy, 20, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.arc(hx, hy, 16, 0, Math.PI * 2);
+        ctx.arc(hx, hy, 14, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Emerald compound pad
+        // Facility base pad
         ctx.fillStyle = '#064e3b';
         ctx.beginPath();
-        ctx.roundRect(hx - 11, hy - 11, 22, 22, 5);
+        ctx.roundRect(hx - 10, hy - 10, 20, 20, 4);
         ctx.fill();
         ctx.strokeStyle = '#10b981';
         ctx.stroke();
 
-        // Bold Medical White Cross
+        // White Cross
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(hx - 2.5, hy - 7, 5, 14);
-        ctx.fillRect(hx - 7, hy - 2.5, 14, 5);
+        ctx.fillRect(hx - 2, hy - 6, 4, 12);
+        ctx.fillRect(hx - 6, hy - 2, 12, 4);
 
-        // Facility Name Banner
-        ctx.font = '700 9px "Plus Jakarta Sans", sans-serif';
-        ctx.fillStyle = '#34d399';
+        // Name
+        ctx.font = '600 8px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#6ee7b7';
         ctx.textAlign = 'center';
-        ctx.fillText(hosp.name, hx, hy + 26);
+        ctx.fillText(hosp.name, hx, hy + 24);
       });
 
       // ==========================================
-      // 8. ACTIVE EMERGENCY INCIDENTS (CRITICAL BEACONS)
+      // 8. ACTIVE EMERGENCY INCIDENTS
       // ==========================================
       const now = Date.now();
       incidents.forEach((inc) => {
@@ -317,63 +298,48 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         const ix = inc.x * scale;
         const iy = inc.y * scale;
 
-        // Expanding triple shockwave rings
-        const wave1 = (now / 20) % 24;
-        const wave2 = (now / 20 + 8) % 24;
-        ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
-        ctx.lineWidth = 1.5;
+        // Double pulse ring
+        const wave1 = (now / 22) % 22;
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.arc(ix, iy, wave1, 0, Math.PI * 2);
         ctx.stroke();
 
-        ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
-        ctx.beginPath();
-        ctx.arc(ix, iy, wave2, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Emergency Core Beacon
         ctx.fillStyle = '#ef4444';
         ctx.beginPath();
-        ctx.arc(ix, iy, 7, 0, Math.PI * 2);
+        ctx.arc(ix, iy, 6, 0, Math.PI * 2);
         ctx.fill();
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Pulsing exclamation mark
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 9px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('!', ix, iy);
-
-        // Call Tag
-        ctx.font = '700 9px "JetBrains Mono", monospace';
+        ctx.font = '600 8px "JetBrains Mono", monospace';
         ctx.fillStyle = '#fca5a5';
-        ctx.fillText(`911 CALL #${inc.id}`, ix, iy - 14);
+        ctx.textAlign = 'center';
+        ctx.fillText(`CALL #${inc.id}`, ix, iy - 12);
       });
 
       // ==========================================
-      // 9. ANIMATED AMBULANCES (SPRINTER VEHICLES)
+      // 9. AMBULANCE FLEET VEHICLES
       // ==========================================
       ambulances.forEach((ambo) => {
         const ax = ambo.x * scale;
         const ay = ambo.y * scale;
 
-        let statusColor = '#10b981'; // idle green
-        let statusText = 'IDLE';
+        let statusColor = '#10b981'; // idle
+        let statusText = 'AVAILABLE';
         if (ambo.status === 'dispatched') {
           statusColor = '#f59e0b';
-          statusText = 'ON ROUTE';
+          statusText = 'RESPONDING';
         } else if (ambo.status === 'transporting') {
-          statusColor = '#a855f7';
+          statusColor = '#3b82f6';
           statusText = 'HOSPITAL';
         } else if (ambo.status === 'returning') {
-          statusColor = '#06b6d4';
-          statusText = 'REPOSITION';
+          statusColor = '#10b981';
+          statusText = 'REPOSITIONING';
         }
 
-        // Calculate heading angle
         let angle = 0;
         if (ambo.targetX !== undefined && ambo.targetY !== undefined) {
           angle = Math.atan2(ambo.targetY * scale - ay, ambo.targetX * scale - ax);
@@ -383,71 +349,70 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         ctx.translate(ax, ay);
         ctx.rotate(angle);
 
-        // Vehicle Chassis (Length: 20px, Width: 12px)
+        // Vehicle Chassis
         ctx.fillStyle = '#ffffff';
         ctx.strokeStyle = '#0f172a';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.roundRect(-10, -6, 20, 12, 3);
+        ctx.roundRect(-9, -5, 18, 10, 2);
         ctx.fill();
         ctx.stroke();
 
         // Windshield
-        ctx.fillStyle = '#0284c7';
-        ctx.fillRect(4, -4, 4, 8);
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(3, -3, 3, 6);
 
-        // Dual Flashing Siren Strobes (alternating Red / Blue)
-        const strobeState = Math.floor(now / 150) % 2 === 0;
+        // Emergency Strobes
         if (ambo.status !== 'idle') {
-          ctx.fillStyle = strobeState ? '#ef4444' : '#3b82f6';
+          const strobe = Math.floor(now / 160) % 2 === 0;
+          ctx.fillStyle = strobe ? '#ef4444' : '#2563eb';
           ctx.beginPath();
-          ctx.arc(-1, -3, 2.5, 0, Math.PI * 2);
+          ctx.arc(-1, -2.5, 2, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = strobeState ? '#3b82f6' : '#ef4444';
+          ctx.fillStyle = strobe ? '#2563eb' : '#ef4444';
           ctx.beginPath();
-          ctx.arc(-1, 3, 2.5, 0, Math.PI * 2);
+          ctx.arc(-1, 2.5, 2, 0, Math.PI * 2);
           ctx.fill();
         }
 
         ctx.restore();
 
-        // Vehicle ID & Status Badge floating near vehicle
-        ctx.font = '700 9px "JetBrains Mono", monospace';
+        // Floating Tag
+        ctx.font = '700 8px "JetBrains Mono", monospace';
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText(`AMBO #${ambo.id}`, ax, ay - 14);
+        ctx.fillText(`UNIT ${ambo.id}`, ax, ay - 12);
 
-        ctx.font = '600 8px "JetBrains Mono", monospace';
+        ctx.font = '600 7px "JetBrains Mono", monospace';
         ctx.fillStyle = statusColor;
-        ctx.fillText(statusText, ax, ay + 16);
+        ctx.fillText(statusText, ax, ay + 14);
       });
 
       // ==========================================
-      // 10. TACTICAL HUD CORNERS & CROSSHAIRS
+      // 10. TACTICAL HUD RETICLE CORNERS
       // ==========================================
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.4)';
-      ctx.lineWidth = 2;
-      const corner = 18;
-      // Top-Left
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.35)';
+      ctx.lineWidth = 1.5;
+      const corner = 14;
       ctx.beginPath();
       ctx.moveTo(8, 8 + corner);
       ctx.lineTo(8, 8);
       ctx.lineTo(8 + corner, 8);
       ctx.stroke();
-      // Top-Right
+
       ctx.beginPath();
       ctx.moveTo(width - 8 - corner, 8);
       ctx.lineTo(width - 8, 8);
       ctx.lineTo(width - 8, 8 + corner);
       ctx.stroke();
-      // Bottom-Left
+
       ctx.beginPath();
       ctx.moveTo(8, height - 8 - corner);
       ctx.lineTo(8, height - 8);
       ctx.lineTo(8 + corner, height - 8);
       ctx.stroke();
-      // Bottom-Right
+
       ctx.beginPath();
       ctx.moveTo(width - 8 - corner, height - 8);
       ctx.lineTo(width - 8, height - 8);
@@ -487,59 +452,58 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
   };
 
   return (
-    <div className="glass-card" style={{ padding: '22px', borderRadius: '18px', position: 'relative' }}>
+    <div className="glass-card" style={{ padding: '20px', borderRadius: 'var(--radius-md)', position: 'relative' }}>
       
-      {/* Header with tactical radar styling */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Radar size={20} color="var(--accent-cyan)" />
-              <span>Tactical Operations Radar</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Compass size={17} color="var(--primary-light)" />
+              <span>Metropolitan Operations Grid</span>
             </h2>
-            <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>50×50 METRO TWIN</span>
-            <span className="badge badge-emerald" style={{ fontSize: '0.7rem' }}>LIVE 60 FPS</span>
+            <span className="badge badge-primary" style={{ fontSize: '0.68rem' }}>50x50 MATRIX</span>
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Full digital-twin city map with arterial expressways, shifting risk clusters, and vehicle telemetry
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            Live spatial telemetry for ambulance positioning, dispatch stations, and hospital centers
           </p>
         </div>
 
-        {/* Tactical Layer Toggles */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        {/* Layer Toggles */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setShowRadarSweep(!showRadarSweep)}
-            className={`btn-secondary ${showRadarSweep ? 'badge-cyan' : ''}`}
-            style={{ fontSize: '0.75rem', padding: '6px 10px' }}
+            className={`btn-secondary ${showRadarSweep ? 'active' : ''}`}
+            style={{ fontSize: '0.72rem', padding: '5px 9px' }}
           >
-            <Compass size={13} />
-            <span>Radar Sweep</span>
+            <Compass size={12} />
+            <span>Radar</span>
           </button>
 
           <button
             onClick={() => setShowHotspots(!showHotspots)}
-            className={`btn-secondary ${showHotspots ? 'badge-rose' : ''}`}
-            style={{ fontSize: '0.75rem', padding: '6px 10px' }}
+            className={`btn-secondary ${showHotspots ? 'active' : ''}`}
+            style={{ fontSize: '0.72rem', padding: '5px 9px' }}
           >
-            <Layers size={13} />
-            <span>Risk Hotspots</span>
+            <Layers size={12} />
+            <span>Risk Zones</span>
           </button>
 
           <button
             onClick={() => setShowPaths(!showPaths)}
-            className={`btn-secondary ${showPaths ? 'badge-purple' : ''}`}
-            style={{ fontSize: '0.75rem', padding: '6px 10px' }}
+            className={`btn-secondary ${showPaths ? 'active' : ''}`}
+            style={{ fontSize: '0.72rem', padding: '5px 9px' }}
           >
-            <Eye size={13} />
-            <span>Trajectories</span>
+            <Eye size={12} />
+            <span>Routes</span>
           </button>
 
           <button
             onClick={() => setShowBaseLabels(!showBaseLabels)}
-            className="btn-secondary"
-            style={{ fontSize: '0.75rem', padding: '6px 10px' }}
+            className={`btn-secondary ${showBaseLabels ? 'active' : ''}`}
+            style={{ fontSize: '0.72rem', padding: '5px 9px' }}
           >
-            <Shield size={13} />
+            <Shield size={12} />
             <span>Stations</span>
           </button>
         </div>
@@ -550,12 +514,12 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         position: 'relative',
         width: '100%',
         aspectRatio: '1 / 1',
-        maxHeight: '620px',
+        maxHeight: '580px',
         margin: '0 auto',
-        borderRadius: '14px',
+        borderRadius: 'var(--radius-sm)',
         overflow: 'hidden',
-        border: '1px solid rgba(6, 182, 212, 0.25)',
-        boxShadow: '0 0 35px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(6, 182, 212, 0.08)'
+        border: '1px solid var(--border-subtle)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6)'
       }}>
         <canvas
           ref={canvasRef}
@@ -571,82 +535,81 @@ export const CityGridMap: React.FC<CityGridMapProps> = ({
         {hoverCoord && (
           <div style={{
             position: 'absolute',
-            top: '14px',
-            left: '14px',
-            background: 'rgba(10, 15, 30, 0.9)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(6, 182, 212, 0.4)',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            fontSize: '0.75rem',
+            top: '12px',
+            left: '12px',
+            background: 'rgba(10, 14, 23, 0.9)',
+            border: '1px solid var(--border-subtle)',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '0.72rem',
             fontFamily: 'var(--font-mono)',
-            color: 'var(--accent-cyan)',
+            color: 'var(--primary-light)',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '6px'
           }}>
-            <span>GPS: [{hoverCoord.x}, {hoverCoord.y}]</span>
+            <MapPin size={11} />
+            <span>POS: [{hoverCoord.x}, {hoverCoord.y}]</span>
           </div>
         )}
 
-        {/* Click to spawn interactive banner */}
+        {/* Interactive Notice */}
         <div style={{
           position: 'absolute',
-          bottom: '14px',
-          left: '14px',
-          background: 'rgba(10, 15, 30, 0.85)',
-          backdropFilter: 'blur(10px)',
-          padding: '7px 14px',
-          borderRadius: '8px',
-          fontSize: '0.75rem',
+          bottom: '12px',
+          left: '12px',
+          background: 'rgba(10, 14, 23, 0.9)',
+          padding: '5px 10px',
+          borderRadius: '4px',
+          fontSize: '0.72rem',
           color: 'var(--text-secondary)',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
+          gap: '6px',
           border: '1px solid var(--border-subtle)'
         }}>
-          <MousePointerClick size={14} color="var(--accent-cyan)" />
-          <span>Click anywhere to dispatch an emergency call to coordinates</span>
+          <MousePointerClick size={12} color="var(--primary-light)" />
+          <span>Click grid location to dispatch emergency incident</span>
         </div>
       </div>
 
-      {/* Enhanced Legend Bar */}
+      {/* Professional Legend Bar */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
         flexWrap: 'wrap',
-        gap: '12px',
-        marginTop: '16px',
-        padding: '12px 16px',
+        gap: '10px',
+        marginTop: '14px',
+        padding: '10px 14px',
         background: 'rgba(255, 255, 255, 0.02)',
-        borderRadius: '10px',
-        fontSize: '0.75rem',
+        borderRadius: 'var(--radius-sm)',
+        fontSize: '0.72rem',
         color: 'var(--text-secondary)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '14px', height: '8px', background: '#ffffff', border: '1px solid #10b981', borderRadius: '2px', display: 'inline-block' }} />
-          <span>Ambulance (Stationed)</span>
+          <Truck size={13} color="#10b981" />
+          <span>Available at Base</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b' }} />
+          <Truck size={13} color="#f59e0b" />
           <span>Responding to Scene</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#a855f7', boxShadow: '0 0 8px #a855f7' }} />
-          <span>Conveying to Hospital</span>
+          <Truck size={13} color="#3b82f6" />
+          <span>Hospital Conveyance</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#06b6d4', boxShadow: '0 0 8px #06b6d4' }} />
-          <span>AI Repositioning</span>
+          <Shield size={13} color="#3b82f6" />
+          <span>Dispatch Station (B1-B25)</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 10px #ef4444' }} />
-          <span>911 Emergency</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '12px', height: '12px', border: '1px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 800 }}>+</span>
+          <Plus size={13} color="#10b981" />
           <span>Trauma Center</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />
+          <span>Emergency Incident</span>
         </div>
       </div>
 

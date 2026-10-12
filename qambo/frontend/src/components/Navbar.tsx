@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, ShieldAlert, Clock, Sun, Moon, Cpu, ExternalLink } from 'lucide-react';
+import { Activity, ShieldCheck, Clock, Sun, Moon, Cpu, ExternalLink } from 'lucide-react';
 import type { SimulationMetrics } from '../types/simulation';
 
 interface NavbarProps {
@@ -16,73 +16,64 @@ export const Navbar: React.FC<NavbarProps> = ({ metrics, selectedAlgorithmName, 
   };
 
   return (
-    <header className="glass-card" style={{ padding: '14px 24px', marginBottom: '20px', borderRadius: '14px' }}>
+    <header className="glass-card" style={{ padding: '14px 22px', marginBottom: '18px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         
         {/* Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+            width: '38px',
+            height: '38px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(6, 182, 212, 0.4)'
+            boxShadow: '0 2px 10px rgba(37, 99, 235, 0.4)'
           }}>
-            <ShieldAlert size={24} color="#ffffff" />
+            <ShieldCheck size={22} color="#ffffff" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                QAMBO AI
+              <h1 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
+                QAMBO
               </h1>
-              <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>RL DISPATCH</span>
+              <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>OPERATIONS</span>
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-              Deep Q-Learning Emergency Ambulance Relocation & Response Simulator
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+              Emergency Ambulance Dispatch & Relocation Platform
             </p>
           </div>
         </div>
 
         {/* Status Indicators */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
           
           {/* Day / Night Shift Epoch */}
-          <div className="badge badge-purple" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
-            {metrics.activeEpoch === 'Day Shift' ? <Sun size={14} color="#f59e0b" /> : <Moon size={14} color="#a855f7" />}
+          <div className="badge badge-neutral" style={{ padding: '5px 10px', fontSize: '0.78rem' }}>
+            {metrics.activeEpoch === 'Day Shift' ? <Sun size={13} color="#f59e0b" /> : <Moon size={13} color="#60a5fa" />}
             <span>{metrics.activeEpoch}</span>
           </div>
 
           {/* Simulation Time */}
-          <div className="glass-card" style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', background: 'rgba(255, 255, 255, 0.04)' }}>
-            <Clock size={14} color="var(--accent-cyan)" />
-            <span style={{ color: 'var(--text-secondary)' }}>Sim Time:</span>
-            <span className="font-mono" style={{ fontWeight: 700, color: '#fff' }}>
+          <div className="badge badge-neutral" style={{ padding: '5px 10px', fontSize: '0.78rem', gap: '6px' }}>
+            <Clock size={13} color="var(--primary-light)" />
+            <span style={{ color: 'var(--text-secondary)' }}>Time:</span>
+            <span className="font-mono" style={{ fontWeight: 600, color: '#ffffff' }}>
               Day {Math.floor(metrics.simTime / 1440) + 1}, {formatTime(metrics.simTime)}
             </span>
           </div>
 
           {/* Active AI Policy */}
-          <div className="glass-card" style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', background: 'rgba(255, 255, 255, 0.04)' }}>
-            <Cpu size={14} color="var(--accent-emerald)" />
-            <span style={{ color: 'var(--text-secondary)' }}>Agent:</span>
-            <span style={{ fontWeight: 600, color: 'var(--accent-emerald)' }}>
-              {selectedAlgorithmName.split(' ')[0]}
-            </span>
+          <div className="badge badge-primary" style={{ padding: '5px 10px', fontSize: '0.78rem', gap: '6px' }}>
+            <Cpu size={13} />
+            <span>Agent: {selectedAlgorithmName.split(' ')[0]}</span>
           </div>
 
           {/* Backend Connection */}
-          <div className="badge" style={{
-            background: isBackendConnected ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-            color: isBackendConnected ? '#34d399' : '#fbbf24',
-            border: `1px solid ${isBackendConnected ? 'rgba(16, 185, 129, 0.3)' : 'rgba(245, 158, 11, 0.3)'}`,
-            padding: '6px 12px',
-            fontSize: '0.8rem'
-          }}>
-            <Activity size={14} />
-            <span>{isBackendConnected ? 'FastAPI Connected' : 'Browser Engine Active'}</span>
+          <div className={`badge ${isBackendConnected ? 'badge-available' : 'badge-transit'}`} style={{ padding: '5px 10px', fontSize: '0.78rem' }}>
+            <Activity size={13} />
+            <span>{isBackendConnected ? 'API Connected' : 'Engine Ready'}</span>
           </div>
 
           {/* GitHub Link */}
@@ -91,10 +82,10 @@ export const Navbar: React.FC<NavbarProps> = ({ metrics, selectedAlgorithmName, 
             target="_blank"
             rel="noreferrer"
             className="btn-secondary"
-            style={{ fontSize: '0.8rem', padding: '6px 12px', textDecoration: 'none' }}
+            style={{ fontSize: '0.78rem', padding: '6px 12px', textDecoration: 'none' }}
           >
-            <span>GitHub</span>
-            <ExternalLink size={13} />
+            <span>Repository</span>
+            <ExternalLink size={12} />
           </a>
 
         </div>

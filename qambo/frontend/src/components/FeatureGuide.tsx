@@ -1,10 +1,10 @@
 import React from 'react';
-import { CheckCircle2, Layout, Activity, Cpu, MapPin, AlertCircle, Sparkles } from 'lucide-react';
+import { CheckCircle2, Layout, Activity, Cpu, MapPin, AlertCircle, BookOpen, Layers, Terminal } from 'lucide-react';
 
 export const FeatureGuide: React.FC = () => {
   const features = [
     {
-      title: 'Geographic City Grid (50×50 Amboworld)',
+      title: 'Geographic City Grid (50x50 Amboworld)',
       desc: 'Simulates a 2D metropolitan area with 25 candidate dispatch stations, 3 major trauma hospitals, and arterial expressways.',
       status: 'Implemented & Visualized',
       tag: 'Environment'
@@ -35,7 +35,7 @@ export const FeatureGuide: React.FC = () => {
     },
     {
       title: 'Quadratic Penalty Reward Function',
-      desc: 'Reward is calculated as -(response_time²), which mathematically punishes extreme tail latencies to ensure no patient waits dangerously long.',
+      desc: 'Reward is calculated as -(response_time squared), mathematically penalizing extreme tail latencies to ensure no patient waits dangerously long.',
       status: 'Implemented & Visualized',
       tag: 'Reward Engineering'
     },
@@ -55,46 +55,46 @@ export const FeatureGuide: React.FC = () => {
 
   const uiSections = [
     {
-      icon: <Layout size={20} color="var(--accent-cyan)" />,
+      icon: <Layout size={18} color="var(--primary-light)" />,
       name: 'Top Navigation Bar',
       detail: 'Displays live simulation clock (Day & 24hr time), active Day/Night shift badge, current AI model in charge, and the FastAPI Python backend connection status.'
     },
     {
-      icon: <Activity size={20} color="var(--accent-emerald)" />,
+      icon: <Activity size={18} color="var(--primary-light)" />,
       name: '5 Top KPI Cards',
       detail: 'Shows Call-to-Arrival time (with % speedup vs Random baseline), Dispatch Transit time, Demand Met rate (100%), Active Calls count, and Fleet Utilization (idle vs busy).'
     },
     {
-      icon: <MapPin size={20} color="var(--accent-purple)" />,
+      icon: <MapPin size={18} color="var(--primary-light)" />,
       name: 'Tactical City Radar (2D Map)',
-      detail: 'Visualizes the 50×50 city with road network, 25 dispatch stations (B1–B25), hospitals (+), pulsing risk hotspots, and animated ambulances with flashing red/blue strobe lights.'
+      detail: 'Visualizes the 50x50 city with road network, 25 dispatch stations (B1-B25), hospitals (+), pulsing risk hotspots, and animated ambulances with directional headings.'
     },
     {
-      icon: <Cpu size={20} color="var(--accent-amber)" />,
+      icon: <Cpu size={18} color="var(--primary-light)" />,
       name: 'Control Panel',
-      detail: 'Allows you to Start/Pause the simulation, step forward, adjust speed (1× to 20×), switch between any of the 10 RL algorithms, and scale the fleet (3, 6, 9 units).'
+      detail: 'Allows you to Start/Pause the simulation, step forward, adjust speed (1x to 20x), switch between any of the 10 RL algorithms, and scale the fleet (3, 6, 9 units).'
     },
     {
-      icon: <AlertCircle size={20} color="var(--accent-rose)" />,
+      icon: <AlertCircle size={18} color="var(--primary-light)" />,
       name: 'Live Response Chart',
       detail: 'Rolling line graph plotting the response latency of recent calls against the 30.4 min random baseline and 16.4 min AI target.'
     },
     {
-      icon: <Sparkles size={20} color="var(--accent-cyan)" />,
+      icon: <Terminal size={18} color="var(--primary-light)" />,
       name: 'Live Dispatch & AI Log',
       detail: 'Real-time chronological audit trail of all incidents reported, vehicles dispatched, hospital drop-offs, and neural network relocation choices.'
     },
   ];
 
   return (
-    <div className="glass-card" style={{ padding: '28px', borderRadius: '18px' }}>
+    <div className="glass-card" style={{ padding: '28px', borderRadius: 'var(--radius-md)' }}>
       
       <div style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Sparkles size={22} color="var(--accent-cyan)" />
-          <span>System Architecture & UI Guide</span>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <BookOpen size={20} color="var(--primary-light)" />
+          <span>System Architecture & Operational Reference</span>
         </h2>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
           Complete breakdown of implemented simulation features and how each section of the interface functions
         </p>
       </div>
@@ -102,7 +102,7 @@ export const FeatureGuide: React.FC = () => {
       {/* 1. Implemented Features Checklist */}
       <div style={{ marginBottom: '32px' }}>
         <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle2 size={18} color="var(--accent-emerald)" />
+          <CheckCircle2 size={16} color="var(--status-available)" />
           <span>Implemented Reinforcement Learning & Simulation Features</span>
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '14px' }}>
@@ -111,8 +111,8 @@ export const FeatureGuide: React.FC = () => {
               key={idx}
               style={{
                 padding: '14px 16px',
-                borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.025)',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(255, 255, 255, 0.02)',
                 border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -123,13 +123,13 @@ export const FeatureGuide: React.FC = () => {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                   <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>{f.title}</h4>
-                  <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>{f.tag}</span>
+                  <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>{f.tag}</span>
                 </div>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>{f.desc}</p>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={13} color="#34d399" />
-                <span style={{ fontSize: '0.7rem', color: '#34d399', fontWeight: 600 }}>{f.status}</span>
+                <CheckCircle2 size={13} color="var(--status-available)" />
+                <span style={{ fontSize: '0.7rem', color: 'var(--status-available)', fontWeight: 600 }}>{f.status}</span>
               </div>
             </div>
           ))}
@@ -139,7 +139,7 @@ export const FeatureGuide: React.FC = () => {
       {/* 2. UI Section Guide */}
       <div>
         <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Layout size={18} color="var(--accent-cyan)" />
+          <Layers size={16} color="var(--primary-light)" />
           <span>UI Dashboard Component Breakdown (What Each Part Shows)</span>
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '14px' }}>
@@ -148,8 +148,8 @@ export const FeatureGuide: React.FC = () => {
               key={idx}
               style={{
                 padding: '16px',
-                borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.025)',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(255, 255, 255, 0.02)',
                 border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 gap: '12px',

@@ -36,12 +36,12 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
   };
 
   return (
-    <div className="glass-card" style={{ padding: '20px', borderRadius: '16px' }}>
+    <div className="glass-card" style={{ padding: '20px', borderRadius: 'var(--radius-md)' }}>
       
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
         <div>
           <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Activity size={16} color="var(--accent-cyan)" />
+            <Activity size={16} color="var(--primary-light)" />
             <span>Rolling Call-to-Arrival Latency</span>
           </h3>
           <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
@@ -49,13 +49,13 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#f87171' }}>
-            <span style={{ width: '8px', height: '2px', background: '#f87171' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', color: 'var(--status-emergency)' }}>
+            <span style={{ width: '8px', height: '2px', background: 'var(--status-emergency)' }} />
             <span>Random Baseline (30.4m)</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-cyan)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', color: 'var(--primary-light)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary-light)' }} />
             <span>Current: {currentAvg}m</span>
           </div>
         </div>
@@ -74,7 +74,7 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
             y1={getY(baseline)}
             x2={chartWidth}
             y2={getY(baseline)}
-            stroke="#f87171"
+            stroke="var(--status-emergency)"
             strokeWidth="1.5"
             strokeDasharray="4 4"
             opacity="0.7"
@@ -86,10 +86,10 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
             y1={getY(16.4)}
             x2={chartWidth}
             y2={getY(16.4)}
-            stroke="#10b981"
+            stroke="var(--status-available)"
             strokeWidth="1"
             strokeDasharray="2 2"
-            opacity="0.4"
+            opacity="0.5"
           />
 
           {/* Response line */}
@@ -105,7 +105,7 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
               <polyline
                 points={getPoints()}
                 fill="none"
-                stroke="var(--accent-cyan)"
+                stroke="var(--primary-light)"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -116,8 +116,8 @@ export const ResponseChart: React.FC<ResponseChartProps> = ({ data, algorithmNam
           {/* Gradients */}
           <defs>
             <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent-cyan)" />
-              <stop offset="100%" stopColor="transparent" />
+              <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>

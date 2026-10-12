@@ -17,23 +17,23 @@ export const EventLog: React.FC<EventLogProps> = ({ logs }) => {
   const getIcon = (type: DispatchLogItem['type']) => {
     switch (type) {
       case 'alert':
-        return <AlertTriangle size={15} color="var(--accent-rose)" />;
+        return <AlertTriangle size={15} color="var(--status-emergency)" />;
       case 'dispatch':
-        return <Truck size={15} color="var(--accent-amber)" />;
+        return <Truck size={15} color="var(--status-transit)" />;
       case 'hospital':
-        return <Hospital size={15} color="var(--accent-purple)" />;
+        return <Hospital size={15} color="var(--primary-light)" />;
       case 'reposition':
-        return <Navigation size={15} color="var(--accent-cyan)" />;
+        return <Navigation size={15} color="var(--primary)" />;
     }
   };
 
   return (
-    <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', display: 'flex', flexDirection: 'column', height: '100%', maxHeight: '580px' }}>
+    <div className="glass-card" style={{ padding: '20px', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', height: '100%', maxHeight: '580px' }}>
       
       {/* Header & Filter */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Terminal size={17} color="var(--accent-emerald)" />
+        <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Terminal size={16} color="var(--primary-light)" />
           <span>Live Dispatch & AI Log</span>
         </h2>
 
@@ -42,7 +42,7 @@ export const EventLog: React.FC<EventLogProps> = ({ logs }) => {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`btn-secondary ${filter === f ? 'badge-cyan' : ''}`}
+              className={`btn-secondary ${filter === f ? 'active' : ''}`}
               style={{ padding: '3px 8px', fontSize: '0.7rem', textTransform: 'capitalize' }}
             >
               {f}

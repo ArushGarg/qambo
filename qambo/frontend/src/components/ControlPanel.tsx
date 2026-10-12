@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, RotateCcw, FastForward, PlusCircle, Sparkles, Sliders } from 'lucide-react';
+import { Play, Pause, RotateCcw, FastForward, PlusCircle, Sliders, CheckCircle } from 'lucide-react';
 import { BENCHMARK_ALGORITHMS } from '../simulation/engine';
 
 interface ControlPanelProps {
@@ -30,67 +30,62 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   onSpawnIncident,
 }) => {
   return (
-    <div className="glass-card" style={{ padding: '20px', borderRadius: '16px', marginBottom: '20px' }}>
+    <div className="glass-card" style={{ padding: '18px 20px', borderRadius: 'var(--radius-md)', marginBottom: '18px' }}>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Sliders size={18} color="var(--accent-cyan)" />
-          <span>Simulation Controls & RL Policy</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Sliders size={16} color="var(--primary-light)" />
+          <span>Operational Control & Model Policy</span>
         </h2>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
         
         {/* Playback Controls */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
-            SIMULATION PLAYBACK
+          <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
+            SIMULATION RUNTIME
           </label>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <button
               onClick={onTogglePlay}
               className="btn-primary"
-              style={{
-                background: isRunning ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #10b981, #059669)',
-                boxShadow: isRunning ? '0 4px 14px rgba(245, 158, 11, 0.4)' : '0 4px 14px rgba(16, 185, 129, 0.4)'
-              }}
             >
-              {isRunning ? <Pause size={16} /> : <Play size={16} />}
-              <span>{isRunning ? 'Pause Sim' : 'Start Sim'}</span>
+              {isRunning ? <Pause size={15} /> : <Play size={15} />}
+              <span>{isRunning ? 'Pause' : 'Start'}</span>
             </button>
 
             <button onClick={onStep} className="btn-secondary" title="Advance by 1 step">
-              <FastForward size={16} />
+              <FastForward size={15} />
               <span>Step</span>
             </button>
 
             <button onClick={onReset} className="btn-secondary" title="Reset Simulation">
-              <RotateCcw size={16} />
+              <RotateCcw size={15} />
               <span>Reset</span>
             </button>
 
-            <button onClick={onSpawnIncident} className="btn-secondary" style={{ color: 'var(--accent-rose)' }}>
-              <PlusCircle size={16} />
-              <span>Spawn Call</span>
+            <button onClick={onSpawnIncident} className="btn-secondary">
+              <PlusCircle size={15} color="var(--primary-light)" />
+              <span>Trigger Call</span>
             </button>
           </div>
 
           {/* Speed Selector */}
-          <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Speed:</span>
+          <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Rate:</span>
             {[1, 2, 5, 10, 20].map((s) => (
               <button
                 key={s}
                 onClick={() => onSpeedChange(s)}
-                className={`btn-secondary ${speed === s ? 'badge-cyan' : ''}`}
+                className={`btn-secondary ${speed === s ? 'active' : ''}`}
                 style={{
-                  padding: '4px 10px',
-                  fontSize: '0.75rem',
-                  borderRadius: '6px',
-                  fontWeight: speed === s ? 700 : 500,
+                  padding: '3px 8px',
+                  fontSize: '0.72rem',
+                  borderRadius: 'var(--radius-sm)',
                 }}
               >
-                {s}×
+                {s}x
               </button>
             ))}
           </div>
@@ -98,8 +93,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
         {/* Algorithm Policy Selector */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
-            REINFORCEMENT LEARNING ALGORITHM
+          <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
+            ACTIVE REINFORCEMENT LEARNING POLICY
           </label>
           <div style={{ position: 'relative' }}>
             <select
@@ -107,12 +102,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               onChange={(e) => onAlgorithmChange(e.target.value)}
               style={{
                 width: '100%',
-                padding: '10px 14px',
-                background: 'rgba(15, 23, 42, 0.9)',
+                padding: '9px 12px',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-subtle)',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: '0.85rem',
+                borderRadius: 'var(--radius-sm)',
+                color: '#ffffff',
+                fontSize: '0.82rem',
                 fontFamily: 'var(--font-sans)',
                 outline: 'none',
                 cursor: 'pointer'
@@ -120,51 +115,50 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             >
               {BENCHMARK_ALGORITHMS.map((algo) => (
                 <option key={algo.id} value={algo.id} style={{ background: '#0f172a', color: '#fff' }}>
-                  {algo.name} {algo.isRecommended ? '⭐ (Best Performance)' : ''}
+                  {algo.name} {algo.isRecommended ? '[Top Benchmark]' : ''}
                 </option>
               ))}
             </select>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px' }}>
-            <Sparkles size={14} color="var(--accent-cyan)" />
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '7px' }}>
+            <CheckCircle size={12} color="var(--primary-light)" />
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
               {selectedAlgorithm === 'random'
-                ? 'Baseline policy: chooses dispatch stations at random without neural prediction.'
-                : 'Deep Q-Network predicts optimal dispatch point minimizing on-scene travel time.'}
+                ? 'Standard unguided baseline allocation.'
+                : 'Deep Q-Network predicts optimal return base from experience buffer.'}
             </span>
           </div>
         </div>
 
         {/* Fleet Scale Selection */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
-            OPERATIONAL SCALE
+          <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>
+            SIMULATION SCALE
           </label>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
             {[
-              { size: 3, label: '3 Units (1 Hotspot)' },
-              { size: 6, label: '6 Units (2 Hotspots)' },
-              { size: 9, label: '9 Units (3 Hotspots)' },
+              { size: 3, label: '3 Units (1 Area)' },
+              { size: 6, label: '6 Units (2 Areas)' },
+              { size: 9, label: '9 Units (3 Areas)' },
             ].map((scale) => (
               <button
                 key={scale.size}
                 onClick={() => onFleetSizeChange(scale.size)}
-                className={`btn-secondary ${fleetSize === scale.size ? 'badge-purple' : ''}`}
+                className={`btn-secondary ${fleetSize === scale.size ? 'active' : ''}`}
                 style={{
                   flex: 1,
-                  padding: '8px 10px',
+                  padding: '7px 8px',
                   fontSize: '0.75rem',
-                  borderRadius: '8px',
+                  borderRadius: 'var(--radius-sm)',
                   justifyContent: 'center',
-                  fontWeight: fleetSize === scale.size ? 700 : 500,
                 }}
               >
                 {scale.label}
               </button>
             ))}
           </div>
-          <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px' }}>
-            Adjusts ambulance fleet density and incident cluster complexity.
+          <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '7px' }}>
+            Adjusts vehicle fleet size and incident cluster distribution.
           </span>
         </div>
 

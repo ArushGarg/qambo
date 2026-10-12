@@ -4,20 +4,20 @@ import { BENCHMARK_ALGORITHMS } from '../simulation/engine';
 
 export const BenchmarkView: React.FC = () => {
   return (
-    <div className="glass-card" style={{ padding: '24px', borderRadius: '16px' }}>
+    <div className="glass-card" style={{ padding: '24px', borderRadius: 'var(--radius-md)' }}>
       
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Award size={20} color="var(--accent-cyan)" />
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Award size={18} color="var(--primary-light)" />
             <span>Empirical Algorithmic Benchmark Matrix</span>
           </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
             Comparative evaluation of all 10 Deep Q-Network architectures tested across 30 independent simulation runs
           </p>
         </div>
-        <span className="badge badge-emerald">
-          <CheckCircle size={14} />
+        <span className="badge badge-available">
+          <CheckCircle size={13} />
           <span>Independent Test Validated</span>
         </span>
       </div>
@@ -41,21 +41,21 @@ export const BenchmarkView: React.FC = () => {
                 key={algo.id}
                 style={{
                   borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-                  background: algo.isRecommended ? 'rgba(6, 182, 212, 0.06)' : 'transparent',
+                  background: algo.isRecommended ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
                 }}
               >
                 <td style={{ padding: '12px 14px', fontWeight: 700, color: '#fff' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ color: 'var(--text-muted)' }}>#{idx + 1}</span>
                     <span>{algo.name}</span>
-                    {algo.isRecommended && <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>SOTA</span>}
+                    {algo.isRecommended && <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>SOTA</span>}
                   </div>
                 </td>
                 <td style={{ padding: '12px 14px', color: 'var(--text-secondary)' }}>
                   {algo.category}
                 </td>
                 <td style={{ padding: '12px 14px' }}>
-                  <span className="font-mono" style={{ fontWeight: 700, color: algo.callToArrival < 17 ? '#34d399' : '#fff' }}>
+                  <span className="font-mono" style={{ fontWeight: 700, color: algo.callToArrival < 17 ? 'var(--status-available)' : 'var(--text-primary)' }}>
                     {algo.callToArrival.toFixed(1)} min
                   </span>
                 </td>
@@ -66,7 +66,7 @@ export const BenchmarkView: React.FC = () => {
                 </td>
                 <td style={{ padding: '12px 14px' }}>
                   {algo.improvement > 0 ? (
-                    <span className="badge badge-emerald" style={{ fontSize: '0.75rem' }}>
+                    <span className="badge badge-available" style={{ fontSize: '0.75rem' }}>
                       <TrendingUp size={12} />
                       +{algo.improvement.toFixed(1)}%
                     </span>
@@ -76,9 +76,9 @@ export const BenchmarkView: React.FC = () => {
                 </td>
                 <td style={{ padding: '12px 14px' }}>
                   {algo.isRecommended ? (
-                    <span style={{ color: '#38bdf8', fontWeight: 600, fontSize: '0.75rem' }}>Optimal (Lowest Variance)</span>
+                    <span style={{ color: 'var(--primary-light)', fontWeight: 600, fontSize: '0.75rem' }}>Optimal (Lowest Variance)</span>
                   ) : algo.improvement > 40 ? (
-                    <span style={{ color: '#34d399', fontSize: '0.75rem' }}>High Performance</span>
+                    <span style={{ color: 'var(--status-available)', fontSize: '0.75rem' }}>High Performance</span>
                   ) : (
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Control Standard</span>
                   )}
@@ -92,7 +92,7 @@ export const BenchmarkView: React.FC = () => {
       {/* Visual Bar Comparison */}
       <div>
         <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Cpu size={16} color="var(--accent-purple)" />
+          <Cpu size={16} color="var(--primary-light)" />
           <span>Response Latency Reduction (Lower is Better)</span>
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -100,14 +100,14 @@ export const BenchmarkView: React.FC = () => {
             const percentage = (algo.callToArrival / 32) * 100;
             return (
               <div key={algo.id} style={{ display: 'grid', gridTemplateColumns: '220px 1fr 70px', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '0.75rem', color: algo.isRecommended ? '#38bdf8' : 'var(--text-secondary)', fontWeight: algo.isRecommended ? 700 : 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: '0.75rem', color: algo.isRecommended ? 'var(--primary-light)' : 'var(--text-secondary)', fontWeight: algo.isRecommended ? 700 : 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {algo.name}
                 </span>
-                <div style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '999px', height: '10px', overflow: 'hidden', position: 'relative' }}>
+                <div style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '999px', height: '8px', overflow: 'hidden', position: 'relative' }}>
                   <div style={{
                     width: `${percentage}%`,
                     height: '100%',
-                    background: algo.id === 'random' ? '#ef4444' : algo.isRecommended ? 'linear-gradient(90deg, #06b6d4, #10b981)' : '#3b82f6',
+                    background: algo.id === 'random' ? 'var(--status-emergency)' : algo.isRecommended ? 'var(--primary)' : 'rgba(148, 163, 184, 0.35)',
                     borderRadius: '999px',
                     transition: 'width 0.5s ease',
                   }} />

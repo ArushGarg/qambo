@@ -201,18 +201,18 @@ export const App: React.FC = () => {
             <EventLog logs={engine.logs} />
 
             {/* Quick Architecture Insight Box */}
-            <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px' }}>
+            <div className="glass-card" style={{ padding: '18px 20px', borderRadius: 'var(--radius-md)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>DEEP REINFORCEMENT LEARNING</span>
+                <span className="badge badge-primary" style={{ fontSize: '0.68rem' }}>DEEP REINFORCEMENT LEARNING</span>
               </div>
               <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>How the AI Optimizes Placement</h4>
               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '10px' }}>
                 When an ambulance discharges a patient at the hospital, the Deep Q-Network evaluates all 25 candidate bases. It predicts expected future response rewards, anticipating shifting incident hotspots while preventing base clustering.
               </p>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>Markov Decision Process</span>
-                <span className="badge badge-emerald" style={{ fontSize: '0.65rem' }}>Bellman Value Function</span>
-                <span className="badge badge-purple" style={{ fontSize: '0.65rem' }}>Bootstrap Bagging Ensembles</span>
+                <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>Markov Decision Process</span>
+                <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>Bellman Value Function</span>
+                <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>Bootstrap Bagging Ensembles</span>
               </div>
             </div>
           </div>
@@ -225,7 +225,7 @@ export const App: React.FC = () => {
 
       {/* Footer */}
       <footer style={{ marginTop: '40px', padding: '20px 0', borderTop: '1px solid var(--border-subtle)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-        <p>QAMBO AI — Reinforcement Learning for Ambulance Location Optimization • Pair-Programmed with Antigravity AI</p>
+        <p>QAMBO AI | Reinforcement Learning for Dynamic Emergency Fleet Optimization</p>
       </footer>
 
     </div>

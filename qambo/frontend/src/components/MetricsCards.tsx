@@ -1,5 +1,5 @@
 import React from 'react';
-import { Timer, Zap, CheckCircle2, PhoneCall, Truck } from 'lucide-react';
+import { Timer, Zap, CheckCircle2, PhoneCall, Truck, TrendingDown } from 'lucide-react';
 import type { SimulationMetrics, Ambulance } from '../types/simulation';
 
 interface MetricsCardsProps {
@@ -22,190 +22,203 @@ export const MetricsCards: React.FC<MetricsCardsProps> = ({ metrics, ambulances,
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-      gap: '16px',
-      marginBottom: '20px'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+      gap: '14px',
+      marginBottom: '18px'
     }}>
       
       {/* 1. Mean Call to Arrival */}
-      <div className="glass-card" style={{ padding: '16px 20px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glass-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, var(--accent-cyan), #3b82f6)'
+          height: '2px',
+          background: 'var(--primary)'
         }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>CALL TO ARRIVAL</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+            CALL TO ARRIVAL
+          </span>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            background: 'var(--accent-cyan-glow)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--primary-glow)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Timer size={18} color="var(--accent-cyan)" />
+            <Timer size={15} color="var(--primary-light)" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-          <span className="font-mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>
             {metrics.avgCallToArrival.toFixed(1)}
           </span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>min</span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>min</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="badge badge-emerald" style={{ fontSize: '0.7rem' }}>
-            ↓ {diffPercent.toFixed(1)}% vs Random
+          <span className="badge badge-available" style={{ fontSize: '0.7rem' }}>
+            <TrendingDown size={11} />
+            {diffPercent.toFixed(1)}% vs baseline
           </span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Baseline: 30.4m</span>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Target: 16.4m</span>
         </div>
       </div>
 
       {/* 2. Mean Assignment to Arrival */}
-      <div className="glass-card" style={{ padding: '16px 20px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glass-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, var(--accent-emerald), #10b981)'
+          height: '2px',
+          background: 'var(--primary-light)'
         }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>DISPATCH TRANSIT</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+            TRANSIT TIME
+          </span>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            background: 'var(--accent-emerald-glow)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'rgba(255, 255, 255, 0.05)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Zap size={18} color="var(--accent-emerald)" />
+            <Zap size={15} color="var(--primary-light)" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-          <span className="font-mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>
             {metrics.avgAssignToArrival.toFixed(1)}
           </span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>min</span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>min</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="badge badge-emerald" style={{ fontSize: '0.7rem' }}>High Efficiency</span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Scene transit time</span>
+          <span className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
+            On-scene dispatch
+          </span>
         </div>
       </div>
 
       {/* 3. Demand Met */}
-      <div className="glass-card" style={{ padding: '16px 20px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glass-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, var(--accent-purple), #a855f7)'
+          height: '2px',
+          background: 'var(--status-available)'
         }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>DEMAND MET</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+            DEMAND MET
+          </span>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            background: 'var(--accent-purple-glow)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--status-available-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <CheckCircle2 size={18} color="var(--accent-purple)" />
+            <CheckCircle2 size={15} color="var(--status-available)" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-          <span className="font-mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>
             {metrics.demandMet.toFixed(1)}%
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="badge badge-purple" style={{ fontSize: '0.7rem' }}>Zero Call Starvation</span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{metrics.resolvedCalls} resolved</span>
+          <span className="badge badge-available" style={{ fontSize: '0.7rem' }}>
+            {metrics.resolvedCalls} resolved
+          </span>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>0 dropped</span>
         </div>
       </div>
 
       {/* 4. Active Emergencies */}
-      <div className="glass-card" style={{ padding: '16px 20px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glass-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, var(--accent-rose), #ef4444)'
+          height: '2px',
+          background: 'var(--status-emergency)'
         }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>EMERGENCY CALLS</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+            ACTIVE CALLS
+          </span>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            background: 'var(--accent-rose-glow)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--status-emergency-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <PhoneCall size={18} color="var(--accent-rose)" />
+            <PhoneCall size={15} color="var(--status-emergency)" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-          <span className="font-mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>
             {activeCallsCount}
           </span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>active</span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>active</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="badge badge-rose" style={{ fontSize: '0.7rem' }}>
+          <span className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
             {metrics.totalCalls} total logged
           </span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Poisson arrival</span>
         </div>
       </div>
 
       {/* 5. Fleet Status */}
-      <div className="glass-card" style={{ padding: '16px 20px', position: 'relative', overflow: 'hidden' }}>
+      <div className="glass-card" style={{ padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, var(--accent-amber), #f59e0b)'
+          height: '2px',
+          background: 'var(--status-transit)'
         }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>FLEET DEPLOYMENT</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+            FLEET IN ACTION
+          </span>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            background: 'var(--accent-amber-glow)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--status-transit-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Truck size={18} color="var(--accent-amber)" />
+            <Truck size={15} color="var(--status-transit)" />
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-          <span className="font-mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>
             {busyCount}/{ambulances.length}
           </span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>in action</span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>deployed</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="badge badge-amber" style={{ fontSize: '0.7rem' }}>
+          <span className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
             {idleCount} stationed at base
           </span>
         </div>
