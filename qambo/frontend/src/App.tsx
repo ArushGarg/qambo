@@ -7,7 +7,8 @@ import { ControlPanel } from './components/ControlPanel';
 import { BenchmarkView } from './components/BenchmarkView';
 import { EventLog } from './components/EventLog';
 import { ResponseChart } from './components/ResponseChart';
-import { Map, BarChart3, Info } from 'lucide-react';
+import { FeatureGuide } from './components/FeatureGuide';
+import { Map, BarChart3, HelpCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const engineRef = useRef<SimulationEngine>(new SimulationEngine());
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
   // React state mirrors
   const [isRunning, setIsRunning] = useState<boolean>(true);
   const [speed, setSpeed] = useState<number>(2);
-  const [activeTab, setActiveTab] = useState<'map' | 'benchmarks'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'benchmarks' | 'guide'>('map');
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
   const [, setTick] = useState<number>(0);
 
@@ -141,14 +142,14 @@ export const App: React.FC = () => {
       />
 
       {/* 4. Tab Navigation Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <button
           onClick={() => setActiveTab('map')}
           className={`btn-secondary ${activeTab === 'map' ? 'btn-primary' : ''}`}
           style={{ padding: '9px 18px', fontSize: '0.85rem' }}
         >
           <Map size={16} />
-          <span>Interactive 2D Grid & Dispatch Radar</span>
+          <span>Tactical 2D Radar & Dispatch View</span>
         </button>
 
         <button
@@ -157,12 +158,21 @@ export const App: React.FC = () => {
           style={{ padding: '9px 18px', fontSize: '0.85rem' }}
         >
           <BarChart3 size={16} />
-          <span>RL Models Benchmark Comparison</span>
+          <span>RL Models Benchmark Matrix</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('guide')}
+          className={`btn-secondary ${activeTab === 'guide' ? 'btn-primary' : ''}`}
+          style={{ padding: '9px 18px', fontSize: '0.85rem' }}
+        >
+          <HelpCircle size={16} />
+          <span>Feature & UI Guide (What Shows What)</span>
         </button>
       </div>
 
       {/* 5. Main Content Area */}
-      {activeTab === 'map' ? (
+      {activeTab === 'map' && (
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 1.6fr) minmax(320px, 1fr)',
@@ -193,11 +203,11 @@ export const App: React.FC = () => {
             {/* Quick Architecture Insight Box */}
             <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                <Info size={16} color="var(--accent-cyan)" />
-                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>How the AI Optimizes Placement</h4>
+                <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>DEEP REINFORCEMENT LEARNING</span>
               </div>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '8px' }}>
-                When an ambulance discharges a patient at the hospital, the Deep Q-Network evaluates all 25 candidate bases. It predicts the expected discounted future response rewards, taking into account current incident risk zones and fleet dispersion.
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>How the AI Optimizes Placement</h4>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '10px' }}>
+                When an ambulance discharges a patient at the hospital, the Deep Q-Network evaluates all 25 candidate bases. It predicts expected future response rewards, anticipating shifting incident hotspots while preventing base clustering.
               </p>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>Markov Decision Process</span>
@@ -207,9 +217,11 @@ export const App: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <BenchmarkView />
       )}
+
+      {activeTab === 'benchmarks' && <BenchmarkView />}
+
+      {activeTab === 'guide' && <FeatureGuide />}
 
       {/* Footer */}
       <footer style={{ marginTop: '40px', padding: '20px 0', borderTop: '1px solid var(--border-subtle)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
